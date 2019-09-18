@@ -1,0 +1,18 @@
+From:continuumio/miniconda:4.5.4
+Bootstrap:docker
+
+%labels
+    MAINTAINER imp/imba bioinformatics core <bioinfo.grp@imp.ac.at>
+    DESCRIPTION Container image with requirements for the ii-bioinfo/ii-rnaseq pipeline (based on nf-core/rnaseq)
+    VERSION 0.4
+
+%files
+    environment.yaml /
+
+%post
+    apt-get install -y procps ttf-liberation
+
+    /opt/conda/bin/conda env update -n root -f /environment.yaml
+    /opt/conda/bin/conda clean -a
+    
+    /opt/conda/bin/R --slave -e 'install.packages(c("NbClust"),quiet=FALSE,dependencies=FALSE,repos="https://mran.microsoft.com/snapshot/2017-09-01/")' 
